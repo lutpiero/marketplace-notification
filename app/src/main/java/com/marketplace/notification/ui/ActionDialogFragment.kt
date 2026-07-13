@@ -128,6 +128,25 @@ class ActionDialogFragment : DialogFragment() {
         }
     }
 
+    private fun getActionTypeFromString(typeString: String): ActionType {
+        return when (typeString) {
+            "API Request" -> ActionType.API_REQUEST
+            "SCP File" -> ActionType.SCP_FILE
+            "Email" -> ActionType.EMAIL
+            "WhatsApp" -> ActionType.WHATSAPP
+            else -> ActionType.API_REQUEST
+        }
+    }
+
+    private fun getActionTypeDisplayName(type: ActionType): String {
+        return when (type) {
+            ActionType.API_REQUEST -> "API Request"
+            ActionType.SCP_FILE -> "SCP File"
+            ActionType.EMAIL -> "Email"
+            ActionType.WHATSAPP -> "WhatsApp"
+        }
+    }
+
     private fun showFieldsForType(type: ActionType) {
         layoutApi.visibility = if (type == ActionType.API_REQUEST) View.VISIBLE else View.GONE
         layoutScp.visibility = if (type == ActionType.SCP_FILE) View.VISIBLE else View.GONE
@@ -137,13 +156,7 @@ class ActionDialogFragment : DialogFragment() {
 
     private fun populateFields(config: ActionConfig) {
         etName.setText(config.name)
-        val typeText = when (config.type) {
-            ActionType.API_REQUEST -> "API Request"
-            ActionType.SCP_FILE -> "SCP File"
-            ActionType.EMAIL -> "Email"
-            ActionType.WHATSAPP -> "WhatsApp"
-        }
-        spType.setText(typeText, false)
+        spType.setText(getActionTypeDisplayName(config.type), false)
         showFieldsForType(config.type)
 
         etApiUrl.setText(config.apiUrl)
@@ -174,15 +187,7 @@ class ActionDialogFragment : DialogFragment() {
         val name = etName.text.toString().trim()
         if (name.isEmpty()) return
 
-        val selectedType = spType.text.toString()
-        val typePosition = when (selectedType) {
-            "API Request" -> 0
-            "SCP File" -> 1
-            "Email" -> 2
-            "WhatsApp" -> 3
-            else -> 0
-        }
-        val type = ActionType.values()[typePosition]
+        val type = getActionTypeFromString(spType.text.toString())
 
         val config = ActionConfig(
             id = existingConfig?.id ?: 0L,
