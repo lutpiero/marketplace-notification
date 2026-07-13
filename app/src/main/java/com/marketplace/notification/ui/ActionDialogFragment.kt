@@ -2,16 +2,15 @@ package com.marketplace.notification.ui
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.LinearLayout
-import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.marketplace.notification.R
 import com.marketplace.notification.data.ActionConfig
 import com.marketplace.notification.data.ActionType
@@ -21,9 +20,11 @@ class ActionDialogFragment : DialogFragment() {
     private var existingConfig: ActionConfig? = null
     private var onSave: ((ActionConfig) -> Unit)? = null
 
+    private val tag = "ActionDialogFragment"
+
     // Form fields
     private lateinit var etName: EditText
-    private lateinit var spType: Spinner
+    private lateinit var spType: MaterialAutoCompleteTextView
     private lateinit var layoutApi: LinearLayout
     private lateinit var layoutScp: LinearLayout
     private lateinit var layoutEmail: LinearLayout
@@ -57,6 +58,19 @@ class ActionDialogFragment : DialogFragment() {
     private lateinit var etWaApiKey: EditText
 
     companion object {
+        private val ACTION_TYPE_DISPLAY_NAMES = mapOf(
+            ActionType.API_REQUEST to "API Request",
+            ActionType.SCP_FILE to "SCP File",
+            ActionType.EMAIL to "Email",
+            ActionType.WHATSAPP to "WhatsApp"
+        )
+
+        private val DISPLAY_NAMES_TO_ACTION_TYPE = ACTION_TYPE_DISPLAY_NAMES
+            .entries
+            .associate { (key, value) -> value to key }
+
+        private val DEFAULT_ACTION_TYPE = "API Request"
+
         fun newInstance(
             config: ActionConfig? = null,
             onSave: (ActionConfig) -> Unit
@@ -117,16 +131,32 @@ class ActionDialogFragment : DialogFragment() {
     }
 
     private fun setupTypeSpinner() {
-        val types = listOf("API Request", "SCP File", "Email", "WhatsApp")
-        spType.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, types)
-            .also { it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
+        val types = ACTION_TYPE_DISPLAY_NAMES.values.toList()
+        val adapter = android.widget.ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_dropdown_item_1line,
+            types
+        )
+        spType.setAdapter(adapter)
 
-        spType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                showFieldsForType(ActionType.values()[position])
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        spType.setOnItemClickListener { _, _, _, _ ->
+            val selectedType = getActionTypeFromString(spType.text.toString())
+            showFieldsForType(selectedType)
         }
+    }
+
+    private fun getActionTypeFromString(typeString: String): ActionType {
+        val result = DISPLAY_NAMES_TO_ACTION_TYPE[typeString]
+
+        if (result == null) {
+            Log.w(tag, "Unknown action type: '$typeString', defaulting to API_REQUEST")
+        }
+
+        return result ?: ActionType.API_REQUEST
+    }
+
+    private fun getActionTypeDisplayName(type: ActionType): String {
+        return ACTION_TYPE_DISPLAY_NAMES[type] ?: DEFAULT_ACTION_TYPE
     }
 
     private fun showFieldsForType(type: ActionType) {
@@ -138,7 +168,7 @@ class ActionDialogFragment : DialogFragment() {
 
     private fun populateFields(config: ActionConfig) {
         etName.setText(config.name)
-        spType.setSelection(config.type.ordinal)
+        spType.setText(getActionTypeDisplayName(config.type), false)
         showFieldsForType(config.type)
 
         etApiUrl.setText(config.apiUrl)
@@ -169,7 +199,7 @@ class ActionDialogFragment : DialogFragment() {
         val name = etName.text.toString().trim()
         if (name.isEmpty()) return
 
-        val type = ActionType.values()[spType.selectedItemPosition]
+        val type = getActionTypeFromString(spType.text.toString())
 
         val config = ActionConfig(
             id = existingConfig?.id ?: 0L,
