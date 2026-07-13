@@ -38,7 +38,7 @@
     <color name="md_theme_dark_tertiary_container">#245226</color>
     <color name="md_theme_dark_on_tertiary_container">#A7D5A0</color>
     <color name="md_theme_dark_error">#F2B8B5</color>
-    <color name="md_theme_dark_error_container">#8C1d18</color>
+    <color name="md_theme_dark_error_container">#8C1D18</color>
     <color name="md_theme_dark_on_error">#601410</color>
     <color name="md_theme_dark_on_error_container">#F9DEDC</color>
     <color name="md_theme_dark_background">#1C1B1F</color>
