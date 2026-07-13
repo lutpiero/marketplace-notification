@@ -5,13 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.LinearLayout
-import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.marketplace.notification.R
 import com.marketplace.notification.data.ActionConfig
 import com.marketplace.notification.data.ActionType
@@ -23,7 +21,7 @@ class ActionDialogFragment : DialogFragment() {
 
     // Form fields
     private lateinit var etName: EditText
-    private lateinit var spType: Spinner
+    private lateinit var spType: MaterialAutoCompleteTextView
     private lateinit var layoutApi: LinearLayout
     private lateinit var layoutScp: LinearLayout
     private lateinit var layoutEmail: LinearLayout
@@ -118,14 +116,15 @@ class ActionDialogFragment : DialogFragment() {
 
     private fun setupTypeSpinner() {
         val types = listOf("API Request", "SCP File", "Email", "WhatsApp")
-        spType.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, types)
-            .also { it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
-
-        spType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                showFieldsForType(ActionType.values()[position])
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        val adapter = android.widget.ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_dropdown_item_1line,
+            types
+        )
+        spType.setAdapter(adapter)
+        
+        spType.setOnItemClickListener { _, _, position, _ ->
+            showFieldsForType(ActionType.values()[position])
         }
     }
 
@@ -138,7 +137,13 @@ class ActionDialogFragment : DialogFragment() {
 
     private fun populateFields(config: ActionConfig) {
         etName.setText(config.name)
-        spType.setSelection(config.type.ordinal)
+        val typeText = when (config.type) {
+            ActionType.API_REQUEST -> "API Request"
+            ActionType.SCP_FILE -> "SCP File"
+            ActionType.EMAIL -> "Email"
+            ActionType.WHATSAPP -> "WhatsApp"
+        }
+        spType.setText(typeText, false)
         showFieldsForType(config.type)
 
         etApiUrl.setText(config.apiUrl)
@@ -169,7 +174,15 @@ class ActionDialogFragment : DialogFragment() {
         val name = etName.text.toString().trim()
         if (name.isEmpty()) return
 
-        val type = ActionType.values()[spType.selectedItemPosition]
+        val selectedType = spType.text.toString()
+        val typePosition = when (selectedType) {
+            "API Request" -> 0
+            "SCP File" -> 1
+            "Email" -> 2
+            "WhatsApp" -> 3
+            else -> 0
+        }
+        val type = ActionType.values()[typePosition]
 
         val config = ActionConfig(
             id = existingConfig?.id ?: 0L,

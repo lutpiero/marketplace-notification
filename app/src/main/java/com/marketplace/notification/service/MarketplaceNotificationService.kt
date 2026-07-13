@@ -71,11 +71,30 @@ class MarketplaceNotificationService : NotificationListenerService() {
 
                 // Execute all enabled actions immediately
                 val actions = repository.getEnabledActions()
+                val actionResults = mutableListOf<Pair<String, Boolean>>()
+                
                 for (action in actions) {
                     val result = actionExecutor.execute(action, savedNotification)
-                    if (result.isSuccess) {
+                    val success = result.isSuccess
+                    actionResults.add(action.name to success)
+                    
+                    if (success) {
                         repository.updateActionCount(id, System.currentTimeMillis())
                     }
+                }
+                
+                // Log summary of action execution
+                if (actionResults.isNotEmpty()) {
+                    val successCount = actionResults.count { it.second }
+                    val failureCount = actionResults.size - successCount
+                    Log.i(tag, "Notification $id: Forwarding completed. Actions executed: $successCount successful, $failureCount failed")
+                    
+                    if (failureCount > 0) {
+                        val failedActions = actionResults.filter { !it.second }.map { it.first }
+                        Log.w(tag, "Notification $id: Failed actions: ${failedActions.joinToString(", ")}")
+                    }
+                } else {
+                    Log.i(tag, "Notification $id: No actions configured to execute")
                 }
 
                 // Schedule periodic re-trigger checks
