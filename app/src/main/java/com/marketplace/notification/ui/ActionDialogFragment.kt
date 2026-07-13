@@ -2,6 +2,7 @@ package com.marketplace.notification.ui
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,8 @@ class ActionDialogFragment : DialogFragment() {
 
     private var existingConfig: ActionConfig? = null
     private var onSave: ((ActionConfig) -> Unit)? = null
+
+    private val tag = "ActionDialogFragment"
 
     // Form fields
     private lateinit var etName: EditText
@@ -137,10 +140,15 @@ class ActionDialogFragment : DialogFragment() {
     }
 
     private fun getActionTypeFromString(typeString: String): ActionType {
-        return ACTION_TYPE_DISPLAY_NAMES.entries
+        val result = ACTION_TYPE_DISPLAY_NAMES.entries
             .find { it.value == typeString }
             ?.key
-            ?: ActionType.API_REQUEST
+
+        if (result == null) {
+            Log.w(tag, "Unknown action type: '$typeString', defaulting to API_REQUEST")
+        }
+
+        return result ?: ActionType.API_REQUEST
     }
 
     private fun getActionTypeDisplayName(type: ActionType): String {

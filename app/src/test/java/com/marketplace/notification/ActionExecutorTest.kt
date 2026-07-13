@@ -67,7 +67,7 @@ class ActionExecutorTest {
     }
 
     @Test
-    fun actionExecutor_executeWithInvalidUrl_shouldReturnFailure() = runBlocking {
+    fun actionExecutor_executeWithInvalidUrl_returnsFailure() = runBlocking {
         val action = ActionConfig(
             id = 1L,
             name = "Test Invalid API",
@@ -179,8 +179,8 @@ class ActionExecutorTest {
     }
 
     @Test
-    fun actionConfig_validationForRequiredFields() {
-        // Verify that a minimal config can be created
+    fun actionConfig_canBeCreatedWithMinimalFields() {
+        // Verify that a minimal config can be created with required fields only
         val minimalConfig = ActionConfig(
             name = "Minimal",
             type = ActionType.API_REQUEST
