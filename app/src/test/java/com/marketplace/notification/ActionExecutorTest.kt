@@ -53,7 +53,7 @@ class ActionExecutorTest {
             enabled = true,
             apiUrl = "https://api.example.com/notify",
             apiMethod = "POST",
-            apiHeaders = "{\"Authorization\": \"******"}",
+            apiHeaders = "{\"Authorization\": \"token123\"}",
             apiBodyTemplate = "{\"notification\": \"{title}\"}"
         )
 
@@ -63,7 +63,7 @@ class ActionExecutorTest {
         assertTrue("Should be enabled", action.enabled)
         assertEquals("URL should be set", "https://api.example.com/notify", action.apiUrl)
         assertEquals("Method should be POST", "POST", action.apiMethod)
-        assertEquals("Headers should be set", "{\"Authorization\": \"******"}", action.apiHeaders)
+        assertEquals("Headers should be set", "{\"Authorization\": \"token123\"}", action.apiHeaders)
     }
 
     @Test

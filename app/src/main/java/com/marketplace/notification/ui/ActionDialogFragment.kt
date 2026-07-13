@@ -61,7 +61,7 @@ class ActionDialogFragment : DialogFragment() {
             ActionType.EMAIL to "Email",
             ActionType.WHATSAPP to "WhatsApp"
         )
-        
+
         fun newInstance(
             config: ActionConfig? = null,
             onSave: (ActionConfig) -> Unit
@@ -129,7 +129,7 @@ class ActionDialogFragment : DialogFragment() {
             types
         )
         spType.setAdapter(adapter)
-        
+
         spType.setOnItemClickListener { _, _, _, _ ->
             val selectedType = getActionTypeFromString(spType.text.toString())
             showFieldsForType(selectedType)
