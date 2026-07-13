@@ -99,7 +99,7 @@ A JSON file named `notification_<id>_<timestamp>.json` will be created per notif
 |---|---|
 | Recipient | Phone number with country code, e.g. `+6281234567890` |
 | API URL | (Optional) WhatsApp Business API endpoint |
-| API Key | (Optional) ****** for the API |
+| API Key | (Optional) Authentication token (Bearer) for the WhatsApp Business API |
 
 If no API URL/key is set, the app falls back to opening a `https://wa.me/` link (user must tap to send).
 
