@@ -45,7 +45,7 @@
     </style>
 
     <style name="Theme.MarketplaceNotification.AppBarOverlay"
-        parent="ThemeOverlay.Material3.DayNight.ActionBar" />
+        parent="ThemeOverlay.Material3.ActionBar" />
 
     <style name="Theme.MarketplaceNotification.PopupOverlay"
         parent="ThemeOverlay.Material3.Light" />
