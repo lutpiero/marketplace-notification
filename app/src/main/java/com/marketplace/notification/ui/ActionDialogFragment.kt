@@ -65,6 +65,10 @@ class ActionDialogFragment : DialogFragment() {
             ActionType.WHATSAPP to "WhatsApp"
         )
 
+        private val DISPLAY_NAMES_TO_ACTION_TYPE = ACTION_TYPE_DISPLAY_NAMES
+            .entries
+            .associate { it.value to it.key }
+
         fun newInstance(
             config: ActionConfig? = null,
             onSave: (ActionConfig) -> Unit
@@ -140,9 +144,7 @@ class ActionDialogFragment : DialogFragment() {
     }
 
     private fun getActionTypeFromString(typeString: String): ActionType {
-        val result = ACTION_TYPE_DISPLAY_NAMES.entries
-            .find { it.value == typeString }
-            ?.key
+        val result = DISPLAY_NAMES_TO_ACTION_TYPE[typeString]
 
         if (result == null) {
             Log.w(tag, "Unknown action type: '$typeString', defaulting to API_REQUEST")
