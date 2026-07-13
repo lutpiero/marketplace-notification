@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Shopping/notification bell icon representing marketplace notification app -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Bell body -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,20 C45.16,20 38,27.16 38,36 L38,42 L30,50 L30,58 L78,58 L78,50 L70,42 L70,36 C70,27.16 62.84,20 54,20 Z" />
+    <!-- Bell bottom (clapper) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,68 C50.69,68 48,65.31 48,62 L60,62 C60,65.31 57.31,68 54,68 Z" />
+    <!-- Small cart icon overlay -->
+    <path
+        android:fillColor="#4CAF50"
+        android:pathData="M62,78 L46,78 L42,90 L66,90 Z M44,75 L64,75 L66,68 L42,68 Z" />
+</vector>
