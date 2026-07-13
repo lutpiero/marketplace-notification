@@ -67,7 +67,7 @@ class ActionDialogFragment : DialogFragment() {
 
         private val DISPLAY_NAMES_TO_ACTION_TYPE = ACTION_TYPE_DISPLAY_NAMES
             .entries
-            .associate { it.value to it.key }
+            .associateBy({ it.value }, { it.key })
 
         fun newInstance(
             config: ActionConfig? = null,

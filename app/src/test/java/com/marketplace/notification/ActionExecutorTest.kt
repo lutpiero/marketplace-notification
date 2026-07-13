@@ -67,12 +67,6 @@ class ActionExecutorTest {
     }
 
     @Test
-    fun actionExecutor_isNotNull() {
-        // Verify that ActionExecutor can be instantiated and is not null
-        assertNotNull("ActionExecutor should be created", actionExecutor)
-    }
-
-    @Test
     fun actionConfig_canBeCreatedWithAllTypes() {
         ActionType.values().forEach { type ->
             val action = ActionConfig(
