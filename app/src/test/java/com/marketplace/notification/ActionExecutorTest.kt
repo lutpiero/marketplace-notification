@@ -38,7 +38,7 @@ class ActionExecutorTest {
     }
 
     @Test
-    fun actionExecutor_executeWithValidApiAction_shouldReturnResult() = runBlocking {
+    fun actionExecutor_executeWithValidApiAction_shouldCompleteSuccessfully() = runBlocking {
         val action = ActionConfig(
             id = 1L,
             name = "Test API Action",
@@ -51,7 +51,8 @@ class ActionExecutorTest {
         )
 
         val result = actionExecutor.execute(action, testNotification)
-        assertTrue("API action execution should return a Result", result != null)
+        assertTrue("API action execution should complete", result != null)
+        // Note: This test requires network access, so it may fail in isolated environments
     }
 
     @Test

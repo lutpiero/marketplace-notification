@@ -55,6 +55,13 @@ class ActionDialogFragment : DialogFragment() {
     private lateinit var etWaApiKey: EditText
 
     companion object {
+        private val ACTION_TYPE_DISPLAY_NAMES = mapOf(
+            ActionType.API_REQUEST to "API Request",
+            ActionType.SCP_FILE to "SCP File",
+            ActionType.EMAIL to "Email",
+            ActionType.WHATSAPP to "WhatsApp"
+        )
+        
         fun newInstance(
             config: ActionConfig? = null,
             onSave: (ActionConfig) -> Unit
@@ -115,7 +122,7 @@ class ActionDialogFragment : DialogFragment() {
     }
 
     private fun setupTypeSpinner() {
-        val types = listOf("API Request", "SCP File", "Email", "WhatsApp")
+        val types = ACTION_TYPE_DISPLAY_NAMES.values.toList()
         val adapter = android.widget.ArrayAdapter(
             requireContext(),
             android.R.layout.simple_dropdown_item_1line,
@@ -123,28 +130,21 @@ class ActionDialogFragment : DialogFragment() {
         )
         spType.setAdapter(adapter)
         
-        spType.setOnItemClickListener { _, _, position, _ ->
-            showFieldsForType(ActionType.values()[position])
+        spType.setOnItemClickListener { _, _, _, _ ->
+            val selectedType = getActionTypeFromString(spType.text.toString())
+            showFieldsForType(selectedType)
         }
     }
 
     private fun getActionTypeFromString(typeString: String): ActionType {
-        return when (typeString) {
-            "API Request" -> ActionType.API_REQUEST
-            "SCP File" -> ActionType.SCP_FILE
-            "Email" -> ActionType.EMAIL
-            "WhatsApp" -> ActionType.WHATSAPP
-            else -> ActionType.API_REQUEST
-        }
+        return ACTION_TYPE_DISPLAY_NAMES.entries
+            .find { it.value == typeString }
+            ?.key
+            ?: ActionType.API_REQUEST
     }
 
     private fun getActionTypeDisplayName(type: ActionType): String {
-        return when (type) {
-            ActionType.API_REQUEST -> "API Request"
-            ActionType.SCP_FILE -> "SCP File"
-            ActionType.EMAIL -> "Email"
-            ActionType.WHATSAPP -> "WhatsApp"
-        }
+        return ACTION_TYPE_DISPLAY_NAMES[type] ?: "API Request"
     }
 
     private fun showFieldsForType(type: ActionType) {

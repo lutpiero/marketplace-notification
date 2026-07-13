@@ -87,7 +87,7 @@ class MarketplaceNotificationService : NotificationListenerService() {
                 if (actionResults.isNotEmpty()) {
                     val successCount = actionResults.count { it.second }
                     val failureCount = actionResults.size - successCount
-                    Log.i(tag, "Notification $id: Forwarding completed. Actions executed: $successCount successful, $failureCount failed")
+                    Log.i(tag, "Notification $id: Forwarding completed. Actions executed: $successCount succeeded, $failureCount failed")
                     
                     if (failureCount > 0) {
                         val failedActions = actionResults.filter { !it.second }.map { it.first }
