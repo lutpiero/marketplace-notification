@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Marketplace Notification</string>
+    <string name="notification_service_label">Marketplace Notification Listener</string>
+    <string name="settings">Settings</string>
+    <string name="select_apps">Select Apps to Monitor</string>
+    <string name="search_apps">Search apps…</string>
+
+    <!-- Main screen -->
+    <string name="empty_state_message">No notifications captured yet.\nMake sure you have added apps to monitor and granted notification access.</string>
+    <string name="tap_to_grant_permission">⚠ Notification access not granted — tap to enable</string>
+    <string name="notification_deleted">Notification deleted</string>
+    <string name="acknowledged">Notification acknowledged ✓</string>
+
+    <!-- Notification item -->
+    <string name="mark_as_read">Mark as read</string>
+    <string name="acknowledge">Acknowledge</string>
+    <string name="delete">Delete</string>
+    <string name="status_new">NEW</string>
+    <string name="status_read">READ</string>
+    <string name="status_acknowledged">DONE</string>
+
+    <!-- Permission dialog -->
+    <string name="permission_required">Notification Access Required</string>
+    <string name="notification_access_message">This app needs permission to read notifications from other apps in order to forward marketplace notifications. Please enable it in the next screen.</string>
+    <string name="grant_access">Grant Access</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Config tabs -->
+    <string name="tab_actions">Actions</string>
+    <string name="tab_apps">Monitored Apps</string>
+
+    <!-- Actions tab -->
+    <string name="empty_actions_message">No actions configured.\nTap + to add a forwarding action.</string>
+    <string name="add_action">Add Action</string>
+    <string name="edit_action">Edit Action</string>
+    <string name="delete_action">Delete Action</string>
+    <string name="delete_action_confirm">Delete action \'%s\'?</string>
+
+    <!-- Apps tab -->
+    <string name="empty_apps_message">No apps monitored.\nTap + to add a marketplace app.</string>
+    <string name="add_app">Add App</string>
+    <string name="remove_app">Remove App</string>
+    <string name="remove_app_confirm">Stop monitoring \'%s\'?</string>
+    <string name="edit_delay">Edit re-trigger delay</string>
+    <string name="retrigger_delay">Re-trigger Delay</string>
+    <string name="retrigger_delay_value">Re-trigger: %d min</string>
+
+    <!-- Action dialog -->
+    <string name="action_name">Action Name</string>
+    <string name="action_type">Action Type</string>
+    <string name="save">Save</string>
+    <string name="edit">Edit</string>
+
+    <!-- API action -->
+    <string name="api_url">API URL</string>
+    <string name="api_method">HTTP Method (GET/POST/PUT)</string>
+    <string name="api_headers">Headers (JSON object)</string>
+    <string name="api_body_template">Body Template (optional, use {app}, {title}, {text})</string>
+
+    <!-- SCP action -->
+    <string name="scp_host">SSH Host</string>
+    <string name="scp_port">SSH Port</string>
+    <string name="scp_username">SSH Username</string>
+    <string name="scp_password">SSH Password</string>
+    <string name="scp_remote_path">Remote Directory Path</string>
+
+    <!-- Email action -->
+    <string name="smtp_host">SMTP Host</string>
+    <string name="smtp_port">SMTP Port</string>
+    <string name="email_username">Email Username</string>
+    <string name="email_password">Email Password</string>
+    <string name="email_from">From Address</string>
+    <string name="email_to">To Address</string>
+    <string name="email_subject">Subject</string>
+
+    <!-- WhatsApp action -->
+    <string name="wa_recipient">Recipient Phone Number (e.g. +6281234567890)</string>
+    <string name="wa_api_url">WhatsApp API URL (optional)</string>
+    <string name="wa_api_key">API Key (optional)</string>
+
+    <!-- Menu -->
+    <string name="menu_settings">Settings</string>
+
+    <!-- Remove -->
+    <string name="remove">Remove</string>
+</resources>
