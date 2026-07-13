@@ -67,7 +67,9 @@ class ActionDialogFragment : DialogFragment() {
 
         private val DISPLAY_NAMES_TO_ACTION_TYPE = ACTION_TYPE_DISPLAY_NAMES
             .entries
-            .associateBy({ it.value }, { it.key })
+            .associate { (key, value) -> value to key }
+
+        private val DEFAULT_ACTION_TYPE = "API Request"
 
         fun newInstance(
             config: ActionConfig? = null,
@@ -154,7 +156,7 @@ class ActionDialogFragment : DialogFragment() {
     }
 
     private fun getActionTypeDisplayName(type: ActionType): String {
-        return ACTION_TYPE_DISPLAY_NAMES[type] ?: "API Request"
+        return ACTION_TYPE_DISPLAY_NAMES[type] ?: DEFAULT_ACTION_TYPE
     }
 
     private fun showFieldsForType(type: ActionType) {
