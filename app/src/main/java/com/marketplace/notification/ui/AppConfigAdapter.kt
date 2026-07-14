@@ -15,6 +15,7 @@ import com.marketplace.notification.data.AppConfig
 class AppConfigAdapter(
     private val onToggle: (AppConfig, Boolean) -> Unit,
     private val onEditDelay: (AppConfig) -> Unit,
+    private val onEditFilters: (AppConfig) -> Unit,
     private val onDelete: (AppConfig) -> Unit
 ) : ListAdapter<AppConfig, AppConfigAdapter.ViewHolder>(DiffCallback()) {
 
@@ -32,6 +33,9 @@ class AppConfigAdapter(
         private val tvAppName: TextView = view.findViewById(R.id.tv_monitored_app_name)
         private val tvPackage: TextView = view.findViewById(R.id.tv_monitored_package)
         private val tvDelay: TextView = view.findViewById(R.id.tv_retrigger_delay)
+        private val tvFiltersLabel: TextView = view.findViewById(R.id.tv_filters_label)
+        private val tvTitleFilter: TextView = view.findViewById(R.id.tv_title_filter)
+        private val tvContentFilter: TextView = view.findViewById(R.id.tv_content_filter)
         private val swEnabled: Switch = view.findViewById(R.id.sw_app_enabled)
         private val btnEditDelay: ImageButton = view.findViewById(R.id.btn_edit_delay)
         private val btnDeleteApp: ImageButton = view.findViewById(R.id.btn_delete_app)
@@ -44,6 +48,24 @@ class AppConfigAdapter(
             )
             swEnabled.isChecked = config.enabled
 
+            // Show/hide filters section
+            val hasFilters = config.titleFilter.isNotBlank() || config.contentFilter.isNotBlank()
+            tvFiltersLabel.visibility = if (hasFilters) View.VISIBLE else View.GONE
+            
+            if (config.titleFilter.isNotBlank()) {
+                tvTitleFilter.visibility = View.VISIBLE
+                tvTitleFilter.text = "Title: ${config.titleFilter}"
+            } else {
+                tvTitleFilter.visibility = View.GONE
+            }
+            
+            if (config.contentFilter.isNotBlank()) {
+                tvContentFilter.visibility = View.VISIBLE
+                tvContentFilter.text = "Content: ${config.contentFilter}"
+            } else {
+                tvContentFilter.visibility = View.GONE
+            }
+
             swEnabled.setOnCheckedChangeListener(null)
             swEnabled.setOnCheckedChangeListener { _, checked ->
                 onToggle(config, checked)
@@ -51,6 +73,13 @@ class AppConfigAdapter(
 
             btnEditDelay.setOnClickListener { onEditDelay(config) }
             btnDeleteApp.setOnClickListener { onDelete(config) }
+            
+            // Make filters clickable to edit
+            if (hasFilters) {
+                tvFiltersLabel.setOnClickListener { onEditFilters(config) }
+                tvTitleFilter.setOnClickListener { onEditFilters(config) }
+                tvContentFilter.setOnClickListener { onEditFilters(config) }
+            }
         }
     }
 
