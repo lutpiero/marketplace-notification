@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
     private lateinit var adapter: NotificationAdapter
+    private lateinit var database: com.marketplace.notification.data.AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
+        database = com.marketplace.notification.data.AppDatabase.getDatabase(this)
         setupRecyclerView()
         observeNotifications()
         checkNotificationPermission()
@@ -47,6 +49,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         adapter = NotificationAdapter(
+            lifecycleOwner = this,
+            database = database,
             onRead = { viewModel.markAsRead(it.id) },
             onAcknowledge = { viewModel.markAsAcknowledged(it.id) },
             onDelete = { notification ->

@@ -7,16 +7,23 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.marketplace.notification.R
+import com.marketplace.notification.data.AppDatabase
 import com.marketplace.notification.data.NotificationEntity
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 class NotificationAdapter(
+    private val lifecycleOwner: LifecycleOwner,
+    private val database: AppDatabase,
     private val onRead: (NotificationEntity) -> Unit,
     private val onAcknowledge: (NotificationEntity) -> Unit,
     private val onDelete: (NotificationEntity) -> Unit
@@ -43,7 +50,18 @@ class NotificationAdapter(
         private val btnRead: ImageButton = view.findViewById(R.id.btn_read)
         private val btnAcknowledge: ImageButton = view.findViewById(R.id.btn_acknowledge)
         private val btnDelete: ImageButton = view.findViewById(R.id.btn_delete)
+        private val tvActionLogsHeader: TextView = view.findViewById(R.id.tv_action_logs_header)
+        private val rvActionLogs: RecyclerView = view.findViewById(R.id.rv_action_logs)
         private val dateFormat = SimpleDateFormat("MMM dd, HH:mm", Locale.getDefault())
+        private val actionLogAdapter = ActionLogAdapter()
+        
+        init {
+            rvActionLogs.apply {
+                layoutManager = LinearLayoutManager(view.context)
+                adapter = actionLogAdapter
+                isNestedScrollingEnabled = false
+            }
+        }
 
         fun bind(notification: NotificationEntity) {
             tvAppName.text = notification.appName
@@ -83,6 +101,23 @@ class NotificationAdapter(
             btnRead.setOnClickListener { onRead(notification) }
             btnAcknowledge.setOnClickListener { onAcknowledge(notification) }
             btnDelete.setOnClickListener { onDelete(notification) }
+            
+            // Load and display action logs
+            loadActionLogs(notification.id)
+        }
+        
+        private fun loadActionLogs(notificationId: Long) {
+            lifecycleOwner.lifecycleScope.launch {
+                val logs = database.actionLogDao().getLogsForNotificationSync(notificationId)
+                if (logs.isNotEmpty()) {
+                    tvActionLogsHeader.visibility = View.VISIBLE
+                    rvActionLogs.visibility = View.VISIBLE
+                    actionLogAdapter.submitList(logs)
+                } else {
+                    tvActionLogsHeader.visibility = View.GONE
+                    rvActionLogs.visibility = View.GONE
+                }
+            }
         }
     }
 

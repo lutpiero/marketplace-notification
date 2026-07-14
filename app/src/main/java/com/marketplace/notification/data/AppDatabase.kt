@@ -7,8 +7,8 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 @Database(
-    entities = [NotificationEntity::class, ActionConfig::class, AppConfig::class],
-    version = 1,
+    entities = [NotificationEntity::class, ActionConfig::class, AppConfig::class, ActionLog::class],
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -17,6 +17,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun notificationDao(): NotificationDao
     abstract fun actionConfigDao(): ActionConfigDao
     abstract fun appConfigDao(): AppConfigDao
+    abstract fun actionLogDao(): ActionLogDao
 
     companion object {
         @Volatile
@@ -28,7 +29,9 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "marketplace_notification_db"
-                ).build()
+                )
+                .fallbackToDestructiveMigration()
+                .build()
                 INSTANCE = instance
                 instance
             }
