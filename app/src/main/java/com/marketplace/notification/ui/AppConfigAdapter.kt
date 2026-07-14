@@ -38,6 +38,7 @@ class AppConfigAdapter(
         private val tvContentFilter: TextView = view.findViewById(R.id.tv_content_filter)
         private val swEnabled: Switch = view.findViewById(R.id.sw_app_enabled)
         private val btnEditDelay: ImageButton = view.findViewById(R.id.btn_edit_delay)
+        private val btnEditFilters: ImageButton = view.findViewById(R.id.btn_edit_filters)
         private val btnDeleteApp: ImageButton = view.findViewById(R.id.btn_delete_app)
 
         fun bind(config: AppConfig) {
@@ -72,14 +73,13 @@ class AppConfigAdapter(
             }
 
             btnEditDelay.setOnClickListener { onEditDelay(config) }
+            btnEditFilters.setOnClickListener { onEditFilters(config) }
             btnDeleteApp.setOnClickListener { onDelete(config) }
             
-            // Make filters clickable to edit
-            if (hasFilters) {
-                tvFiltersLabel.setOnClickListener { onEditFilters(config) }
-                tvTitleFilter.setOnClickListener { onEditFilters(config) }
-                tvContentFilter.setOnClickListener { onEditFilters(config) }
-            }
+            // Make filters clickable to edit as well
+            tvFiltersLabel.setOnClickListener { onEditFilters(config) }
+            tvTitleFilter.setOnClickListener { onEditFilters(config) }
+            tvContentFilter.setOnClickListener { onEditFilters(config) }
         }
     }
 
