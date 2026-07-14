@@ -9,5 +9,7 @@ data class AppConfig(
     val packageName: String,
     val appName: String,
     val enabled: Boolean = true,
-    val retriggerDelayMinutes: Int = 30
+    val retriggerDelayMinutes: Int = 30,
+    val titleFilter: String = "",
+    val contentFilter: String = ""
 )

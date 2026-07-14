@@ -54,6 +54,34 @@ class MarketplaceNotificationService : NotificationListenerService() {
 
                 if (title.isBlank() && text.isBlank()) return@launch
 
+                // Get app config to check filters
+                val appConfig = db.appConfigDao().getEnabledApps().find { it.packageName == sbn.packageName }
+                if (appConfig != null) {
+                    // Apply filters if configured
+                    val titleFilter = appConfig.titleFilter.trim()
+                    val contentFilter = appConfig.contentFilter.trim()
+                    
+                    if (titleFilter.isNotBlank() || contentFilter.isNotBlank()) {
+                        var matchesFilter = false
+                        
+                        // Check title filter (case-insensitive)
+                        if (titleFilter.isNotBlank() && title.contains(titleFilter, ignoreCase = true)) {
+                            matchesFilter = true
+                        }
+                        
+                        // Check content filter (case-insensitive)
+                        if (contentFilter.isNotBlank() && text.contains(contentFilter, ignoreCase = true)) {
+                            matchesFilter = true
+                        }
+                        
+                        // If filters are set but notification doesn't match, ignore it
+                        if (!matchesFilter) {
+                            Log.d(tag, "Notification from ${sbn.packageName} filtered out: title='$title', text='$text'")
+                            return@launch
+                        }
+                    }
+                }
+
                 val appName = resolveAppName(sbn.packageName)
 
                 val notification = NotificationEntity(

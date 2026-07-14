@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 
 @Database(
     entities = [NotificationEntity::class, ActionConfig::class, AppConfig::class, ActionLog::class],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

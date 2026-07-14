@@ -37,6 +37,7 @@ class AppsFragment : Fragment() {
                 configViewModel.updateAppConfig(config.copy(enabled = enabled))
             },
             onEditDelay = { config -> showDelayDialog(config) },
+            onEditFilters = { config -> showFiltersDialog(config) },
             onDelete = { config -> confirmDeleteApp(config) }
         )
 
@@ -66,6 +67,31 @@ class AppsFragment : Fragment() {
             .setSingleChoiceItems(options, currentIndex) { dialog, which ->
                 configViewModel.updateAppConfig(config.copy(retriggerDelayMinutes = values[which]))
                 dialog.dismiss()
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
+    }
+
+    private fun showFiltersDialog(config: AppConfig) {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_filter_config, null)
+        val etTitleFilter = dialogView.findViewById<android.widget.EditText>(R.id.et_title_filter)
+        val etContentFilter = dialogView.findViewById<android.widget.EditText>(R.id.et_content_filter)
+        
+        etTitleFilter.setText(config.titleFilter)
+        etContentFilter.setText(config.contentFilter)
+        
+        AlertDialog.Builder(requireContext())
+            .setTitle("Edit Filters for ${config.appName}")
+            .setView(dialogView)
+            .setPositiveButton(R.string.save) { _, _ ->
+                val titleFilter = etTitleFilter.text.toString().trim()
+                val contentFilter = etContentFilter.text.toString().trim()
+                configViewModel.updateAppConfig(
+                    config.copy(
+                        titleFilter = titleFilter,
+                        contentFilter = contentFilter
+                    )
+                )
             }
             .setNegativeButton(R.string.cancel, null)
             .show()

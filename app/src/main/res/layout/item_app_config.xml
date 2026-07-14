@@ -45,6 +45,32 @@
                 android:textColor="?attr/colorPrimary"
                 android:layout_marginTop="2dp" />
 
+            <TextView
+                android:id="@+id/tv_filters_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Filters:"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="?android:attr/textColorSecondary"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/tv_title_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11sp"
+                android:textColor="?android:attr/textColorSecondary"
+                android:layout_marginTop="2dp" />
+
+            <TextView
+                android:id="@+id/tv_content_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11sp"
+                android:textColor="?android:attr/textColorSecondary"
+                android:layout_marginTop="2dp" />
+
         </LinearLayout>
 
         <Switch
