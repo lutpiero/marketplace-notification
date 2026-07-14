@@ -21,10 +21,11 @@ class MarketplaceNotificationService : NotificationListenerService() {
 
     private lateinit var repository: NotificationRepository
     private lateinit var actionExecutor: ActionExecutor
+    private lateinit var db: AppDatabase
 
     override fun onCreate() {
         super.onCreate()
-        val db = AppDatabase.getDatabase(this)
+        db = AppDatabase.getDatabase(this)
         repository = NotificationRepository(db)
         actionExecutor = ActionExecutor(this)
         Log.i(tag, "Notification listener service started")
@@ -77,6 +78,16 @@ class MarketplaceNotificationService : NotificationListenerService() {
                     val result = actionExecutor.execute(action, savedNotification)
                     val success = result.isSuccess
                     actionResults.add(action.name to success)
+                    
+                    // Log action execution
+                    val actionLog = com.marketplace.notification.data.ActionLog(
+                        notificationId = id,
+                        actionName = action.name,
+                        actionType = action.type.name,
+                        success = success,
+                        errorMessage = result.exceptionOrNull()?.message
+                    )
+                    db.actionLogDao().insert(actionLog)
                     
                     if (success) {
                         repository.updateActionCount(id, System.currentTimeMillis())
